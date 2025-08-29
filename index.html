@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welding Amperage Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .calculator {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            color: #856404;
+        }
+
+        .warning h4 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Welding Calculator</h1>
+            <p>Get recommended amperage and voltage for your welding project</p>
+        </div>
+        
+        <div class="calculator">
+            <div class="form-group">
+                <label for="metalType">Metal Type:</label>
+                <select id="metalType">
+                    <option value="">Select Metal Type</option>
+                    <option value="steel">Steel (Mild Steel)</option>
+                    <option value="stainless">Stainless Steel</option>
+                    <option value="aluminum">Aluminum</option>
+                    <option value="cast-iron">Cast Iron</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="thickness">Metal Thickness:</label>
+                <select id="thickness">
+                    <option value="">Select Thickness</option>
+                    <option value="0.0625">1/16" (0.0625")</option>
+                    <option value="0.09375">3/32" (0.09375")</option>
+                    <option value="0.125">1/8" (0.125")</option>
+                    <option value="0.1875">3/16" (0.1875")</option>
+                    <option value="0.25">1/4" (0.25")</option>
+                    <option value="0.3125">5/16" (0.3125")</option>
+                    <option value="0.375">3/8" (0.375")</option>
+                    <option value="0.4375">7/16" (0.4375")</option>
+                    <option value="0.5">1/2" (0.5")</option>
+                    <option value="0.625">5/8" (0.625")</option>
+                    <option value="0.75">3/4" (0.75")</option>
+                    <option value="1">1" (1.0")</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="weldType">Welding Process:</label>
+                <select id="weldType">
+                    <option value="stick">Stick/SMAW</option>
+                    <option value="mig">MIG/GMAW</option>
+                    <option value="tig">TIG/GTAW</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="wireDiameterGroup" style="display: none;">
+                <label for="wireDiameter">Wire Diameter (for MIG):</label>
+                <select id="wireDiameter">
+                    <option value="0.030">0.030" (0.8mm)</option>
+                    <option value="0.035" selected>0.035" (0.9mm)</option>
+                    <option value="0.045">0.045" (1.2mm)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="electrodeGroup" style="display: none;">
+                <label for="electrodeType">Stick Electrode (for Stick/SMAW):</label>
+                <select id="electrodeType">
+                    <option value="6010" selected>E6010 (Deep penetration, all positions)</option>
+                    <option value="7018">E7018 (Low hydrogen, smooth finish)</option>
+                </select>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateAmperage()">Calculate Amperage</button>
+
+            <div id="result" class="result">
+                <h3>Recommended Settings</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">⚡ Amperage</h4>
+                        <p id="amperageValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">🔌 Voltage</h4>
+                        <p id="voltageValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                    </div>
+                    <div id="wireSpeedContainer" style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center; display: none;">
+                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">🔧 Wire Speed</h4>
+                        <p id="wireSpeedValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <h4>⚠️ Safety Notice</h4>
+                <p>These are general recommendations. Always consult your welding equipment manual and consider joint design, position, and material condition. Practice on test pieces first.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const weldingData = {
+            steel: {
+                stick: {
+                    6010: {
+                        0.0625: {amps: [30, 45], volts: [20, 24]},
+                        0.09375: {amps: [35, 55], volts: [22, 26]},
+                        0.125: {amps: [90, 140], volts: [23, 27]},
+                        0.1875: {amps: [120, 180], volts: [24, 28]},
+                        0.25: {amps: [150, 210], volts: [25, 29]},
+                        0.3125: {amps: [180, 240], volts: [26, 30]},
+                        0.375: {amps: [210, 270], volts: [27, 31]},
+                        0.4375: {amps: [240, 300], volts: [28, 32]},
+                        0.5: {amps: [270, 330], volts: [29, 33]},
+                        0.625: {amps: [300, 360], volts: [30, 34]},
+                        0.75: {amps: [330, 390], volts: [31, 35]},
+                        1: {amps: [360, 420], volts: [32, 36]}
+                    },
+                    7018: {
+                        0.0625: {amps: [25, 40], volts: [18, 22]},
+                        0.09375: {amps: [30, 50], volts: [20, 24]},
+                        0.125: {amps: [90, 130], volts: [21, 25]},
+                        0.1875: {amps: [110, 160], volts: [22, 26]},
+                        0.25: {amps: [130, 180], volts: [23, 27]},
+                        0.3125: {amps: [150, 200], volts: [24, 28]},
+                        0.375: {amps: [170, 220], volts: [25, 29]},
+                        0.4375: {amps: [190, 240], volts: [26, 30]},
+                        0.5: {amps: [210, 260], volts: [27, 31]},
+                        0.625: {amps: [230, 280], volts: [28, 32]},
+                        0.75: {amps: [250, 300], volts: [29, 33]},
+                        1: {amps: [270, 320], volts: [30, 34]}
+                    }
+                },
+                mig: {
+                    0.0625: {amps: [30, 50], volts: [16, 18]},
+                    0.09375: {amps: [40, 60], volts: [17, 19]},
+                    0.125: {amps: [60, 90], volts: [18, 20]},
+                    0.1875: {amps: [80, 120], volts: [19, 21]},
+                    0.25: {amps: [100, 150], volts: [20, 22]},
+                    0.3125: {amps: [120, 170], volts: [21, 23]},
+                    0.375: {amps: [140, 190], volts: [22, 24]},
+                    0.4375: {amps: [160, 210], volts: [23, 25]},
+                    0.5: {amps: [180, 230], volts: [24, 26]},
+                    0.625: {amps: [200, 250], volts: [25, 27]},
+                    0.75: {amps: [220, 270], volts: [26, 28]},
+                    1: {amps: [240, 320], volts: [27, 29]}
+                },
+                tig: {
+                    0.0625: {amps: [15, 30], volts: [10, 12]},
+                    0.09375: {amps: [20, 40], volts: [11, 13]},
+                    0.125: {amps: [30, 60], volts: [12, 14]},
+                    0.1875: {amps: [50, 90], volts: [13, 15]},
+                    0.25: {amps: [70, 120], volts: [14, 16]},
+                    0.3125: {amps: [90, 140], volts: [15, 17]},
+                    0.375: {amps: [110, 160], volts: [16, 18]},
+                    0.4375: {amps: [130, 180], volts: [17, 19]},
+                    0.5: {amps: [150, 200], volts: [18, 20]},
+                    0.625: {amps: [170, 220], volts: [19, 21]},
+                    0.75: {amps: [190, 240], volts: [20, 22]},
+                    1: {amps: [210, 280], volts: [21, 23]}
+                }
+            },
+            stainless: {
+                stick: {
+                    6010: {
+                        0.0625: {amps: [25, 40], volts: [20, 24]},
+                        0.09375: {amps: [30, 50], volts: [22, 26]},
+                        0.125: {amps: [80, 120], volts: [23, 27]},
+                        0.1875: {amps: [100, 150], volts: [24, 28]},
+                        0.25: {amps: [120, 170], volts: [25, 29]},
+                        0.3125: {amps: [140, 190], volts: [26, 30]},
+                        0.375: {amps: [160, 210], volts: [27, 31]},
+                        0.4375: {amps: [180, 230], volts: [28, 32]},
+                        0.5: {amps: [200, 250], volts: [29, 33]},
+                        0.625: {amps: [220, 270], volts: [30, 34]},
+                        0.75: {amps: [240, 290], volts: [31, 35]},
+                        1: {amps: [260, 310], volts: [32, 36]}
+                    },
+                    7018: {
+                        0.0625: {amps: [20, 35], volts: [18, 22]},
+                        0.09375: {amps: [25, 45], volts: [20, 24]},
+                        0.125: {amps: [70, 110], volts: [21, 25]},
+                        0.1875: {amps: [90, 140], volts: [22, 26]},
+                        0.25: {amps: [110, 160], volts: [23, 27]},
+                        0.3125: {amps: [130, 180], volts: [24, 28]},
+                        0.375: {amps: [150, 200], volts: [25, 29]},
+                        0.4375: {amps: [170, 220], volts: [26, 30]},
+                        0.5: {amps: [190, 240], volts: [27, 31]},
+                        0.625: {amps: [210, 260], volts: [28, 32]},
+                        0.75: {amps: [230, 280], volts: [29, 33]},
+                        1: {amps: [250, 300], volts: [30, 34]}
+                    }
+                },
+                mig: {
+                    0.0625: {amps: [25, 45], volts: [16, 18]},
+                    0.09375: {amps: [35, 55], volts: [17, 19]},
+                    0.125: {amps: [55, 85], volts: [18, 20]},
+                    0.1875: {amps: [75, 115], volts: [19, 21]},
+                    0.25: {amps: [95, 145], volts: [20, 22]},
+                    0.3125: {amps: [115, 165], volts: [21, 23]},
+                    0.375: {amps: [135, 185], volts: [22, 24]},
+                    0.4375: {amps: [155, 205], volts: [23, 25]},
+                    0.5: {amps: [175, 225], volts: [24, 26]},
+                    0.625: {amps: [195, 245], volts: [25, 27]},
+                    0.75: {amps: [215, 265], volts: [26, 28]},
+                    1: {amps: [235, 315], volts: [27, 29]}
+                },
+                tig: {
+                    0.0625: {amps: [10, 25], volts: [10, 12]},
+                    0.09375: {amps: [15, 35], volts: [11, 13]},
+                    0.125: {amps: [25, 55], volts: [12, 14]},
+                    0.1875: {amps: [45, 85], volts: [13, 15]},
+                    0.25: {amps: [65, 115], volts: [14, 16]},
+                    0.3125: {amps: [85, 135], volts: [15, 17]},
+                    0.375: {amps: [105, 155], volts: [16, 18]},
+                    0.4375: {amps: [125, 175], volts: [17, 19]},
+                    0.5: {amps: [145, 195], volts: [18, 20]},
+                    0.625: {amps: [165, 215], volts: [19, 21]},
+                    0.75: {amps: [185, 235], volts: [20, 22]},
+                    1: {amps: [205, 275], volts: [21, 23]}
+                }
+            },
+            aluminum: {
+                mig: {
+                    0.0625: {amps: [40, 70], volts: [16, 18]},
+                    0.09375: {amps: [60, 90], volts: [17, 19]},
+                    0.125: {amps: [80, 120], volts: [18, 20]},
+                    0.1875: {amps: [110, 160], volts: [19, 21]},
+                    0.25: {amps: [140, 200], volts: [20, 22]},
+                    0.3125: {amps: [170, 240], volts: [21, 23]},
+                    0.375: {amps: [200, 280], volts: [22, 24]},
+                    0.4375: {amps: [230, 320], volts: [23, 25]},
+                    0.5: {amps: [260, 360], volts: [24, 26]},
+                    0.625: {amps: [290, 400], volts: [25, 27]},
+                    0.75: {amps: [320, 440], volts: [26, 28]},
+                    1: {amps: [350, 500], volts: [27, 29]}
+                },
+                tig: {
+                    0.0625: {amps: [20, 40], volts: [10, 12]},
+                    0.09375: {amps: [30, 60], volts: [11, 13]},
+                    0.125: {amps: [50, 90], volts: [12, 14]},
+                    0.1875: {amps: [80, 130], volts: [13, 15]},
+                    0.25: {amps: [110, 170], volts: [14, 16]},
+                    0.3125: {amps: [140, 210], volts: [15, 17]},
+                    0.375: {amps: [170, 250], volts: [16, 18]},
+                    0.4375: {amps: [200, 290], volts: [17, 19]},
+                    0.5: {amps: [230, 330], volts: [18, 20]},
+                    0.625: {amps: [260, 370], volts: [19, 21]},
+                    0.75: {amps: [290, 410], volts: [20, 22]},
+                    1: {amps: [320, 470], volts: [21, 23]}
+                }
+            },
+            "cast-iron": {
+                stick: {
+                    6010: {
+                        0.125: {amps: [60, 100], volts: [24, 28]},
+                        0.1875: {amps: [80, 140], volts: [26, 30]},
+                        0.25: {amps: [100, 170], volts: [28, 32]},
+                        0.3125: {amps: [120, 200], volts: [30, 34]},
+                        0.375: {amps: [140, 230], volts: [32, 36]},
+                        0.4375: {amps: [160, 260], volts: [34, 38]},
+                        0.5: {amps: [180, 290], volts: [36, 40]},
+                        0.625: {amps: [200, 320], volts: [38, 42]},
+                        0.75: {amps: [220, 350], volts: [40, 44]},
+                        1: {amps: [240, 390], volts: [42, 46]}
+                    },
+                    7018: {
+                        0.125: {amps: [50, 90], volts: [22, 26]},
+                        0.1875: {amps: [70, 130], volts: [24, 28]},
+                        0.25: {amps: [90, 160], volts: [26, 30]},
+                        0.3125: {amps: [110, 190], volts: [28, 32]},
+                        0.375: {amps: [130, 220], volts: [30, 34]},
+                        0.4375: {amps: [150, 250], volts: [32, 36]},
+                        0.5: {amps: [170, 280], volts: [34, 38]},
+                        0.625: {amps: [190, 310], volts: [36, 40]},
+                        0.75: {amps: [210, 340], volts: [38, 42]},
+                        1: {amps: [230, 380], volts: [40, 44]}
+                    }
+                }
+            }
+        };
+
+        // Miller-based wire speed calculation function
+        function calculateWireSpeed(amperage, wireDiameter, metalType) {
+            // Miller-specific wire speed calculations based on actual Miller machine data
+            const wireSize = parseFloat(wireDiameter);
+            
+            // Base IPM per amp ratios from Miller recommendations
+            let baseIpmPerAmp;
+            
+            if (metalType === 'steel') {
+                // Miller data: 125A = ~250 IPM for 0.035" wire (steel)
+                if (wireSize === 0.030) baseIpmPerAmp = 2.2;      // Faster feed for thinner wire
+                else if (wireSize === 0.035) baseIpmPerAmp = 2.0;  // Miller baseline
+                else if (wireSize === 0.045) baseIpmPerAmp = 1.7;  // Slower feed for thicker wire
+                else baseIpmPerAmp = 2.0;
+            } 
+            else if (metalType === 'stainless') {
+                // Stainless typically runs 10-15% slower than steel
+                if (wireSize === 0.030) baseIpmPerAmp = 1.9;
+                else if (wireSize === 0.035) baseIpmPerAmp = 1.7;
+                else if (wireSize === 0.045) baseIpmPerAmp = 1.4;
+                else baseIpmPerAmp = 1.7;
+            } 
+            else if (metalType === 'aluminum') {
+                // Aluminum typically runs faster due to thermal conductivity
+                if (wireSize === 0.030) baseIpmPerAmp = 2.8;
+                else if (wireSize === 0.035) baseIpmPerAmp = 2.5;
+                else if (wireSize === 0.045) baseIpmPerAmp = 2.1;
+                else baseIpmPerAmp = 2.5;
+            } 
+            else {
+                baseIpmPerAmp = 2.0; // Default to steel values
+            }
+            
+            // Calculate wire speed using Miller methodology
+            const calculatedSpeed = Math.round(amperage * baseIpmPerAmp);
+            
+            // Apply Miller's practical limits (150-500 IPM typical range)
+            return Math.max(150, Math.min(500, calculatedSpeed));
+        }
+
+        function calculateAmperage() {
+            const metalType = document.getElementById('metalType').value;
+            const thickness = parseFloat(document.getElementById('thickness').value);
+            const weldType = document.getElementById('weldType').value;
+            const wireDiameter = document.getElementById('wireDiameter').value;
+            const electrodeType = document.getElementById('electrodeType').value;
+            
+            if (!metalType || !thickness || !weldType) {
+                alert('Please select all options');
+                return;
+            }
+
+            if (weldType === 'mig' && !wireDiameter) {
+                alert('Please select wire diameter for MIG welding');
+                return;
+            }
+
+            if (weldType === 'stick' && !electrodeType) {
+                alert('Please select electrode type for Stick welding');
+                return;
+            }
+
+            const data = weldingData[metalType];
+            let settings;
+
+            // Handle electrode-specific data for stick welding
+            if (weldType === 'stick') {
+                if (!data || !data[weldType] || !data[weldType][electrodeType] || !data[weldType][electrodeType][thickness]) {
+                    document.getElementById('amperageValue').textContent = 'No data available for this combination';
+                    document.getElementById('result').classList.add('show');
+                    return;
+                }
+                settings = data[weldType][electrodeType][thickness];
+            } else {
+                // Handle MIG and TIG welding (no electrode selection)
+                if (!data || !data[weldType] || !data[weldType][thickness]) {
+                    document.getElementById('amperageValue').textContent = 'No data available for this combination';
+                    document.getElementById('result').classList.add('show');
+                    return;
+                }
+                settings = data[weldType][thickness];
+            }
+
+            const minAmp = settings.amps[0];
+            const maxAmp = settings.amps[1];
+            const minVolt = settings.volts[0];
+            const maxVolt = settings.volts[1];
+
+            document.getElementById('amperageValue').textContent = `${minAmp} - ${maxAmp} A`;
+            document.getElementById('voltageValue').textContent = `${minVolt} - ${maxVolt} V`;
+            
+            // Calculate and show wire speed for MIG welding only
+            const wireSpeedContainer = document.getElementById('wireSpeedContainer');
+            if (weldType === 'mig') {
+                const minWireSpeed = calculateWireSpeed(minAmp, wireDiameter, metalType);
+                const maxWireSpeed = calculateWireSpeed(maxAmp, wireDiameter, metalType);
+                document.getElementById('wireSpeedValue').textContent = `${minWireSpeed} - ${maxWireSpeed} IPM`;
+                wireSpeedContainer.style.display = 'block';
+            } else {
+                wireSpeedContainer.style.display = 'none';
+            }
+            
+            document.getElementById('result').classList.add('show');
+        }
+
+        // Function to show/hide process-specific fields based on welding type
+        function updateProcessFields() {
+            const weldType = document.getElementById('weldType').value;
+            const wireDiameterGroup = document.getElementById('wireDiameterGroup');
+            const electrodeGroup = document.getElementById('electrodeGroup');
+            
+            // Show/hide wire diameter for MIG
+            if (weldType === 'mig') {
+                wireDiameterGroup.style.display = 'block';
+                electrodeGroup.style.display = 'none';
+            } 
+            // Show/hide electrode selection for Stick
+            else if (weldType === 'stick') {
+                wireDiameterGroup.style.display = 'none';
+                electrodeGroup.style.display = 'block';
+            } 
+            // Hide both for TIG
+            else {
+                wireDiameterGroup.style.display = 'none';
+                electrodeGroup.style.display = 'none';
+            }
+        }
+
+        document.getElementById('metalType').addEventListener('change', function() {
+            const metalType = this.value;
+            const weldTypeSelect = document.getElementById('weldType');
+            
+            weldTypeSelect.innerHTML = '';
+            
+            if (metalType === 'aluminum') {
+                weldTypeSelect.innerHTML = `
+                    <option value="mig">MIG/GMAW</option>
+                    <option value="tig">TIG/GTAW</option>
+                `;
+            } else if (metalType === 'cast-iron') {
+                weldTypeSelect.innerHTML = `
+                    <option value="stick">Stick/SMAW</option>
+                `;
+            } else {
+                weldTypeSelect.innerHTML = `
+                    <option value="stick">Stick/SMAW</option>
+                    <option value="mig">MIG/GMAW</option>
+                    <option value="tig">TIG/GTAW</option>
+                `;
+            }
+            
+            // Update process-specific fields visibility
+            updateProcessFields();
+            document.getElementById('result').classList.remove('show');
+        });
+
+        document.getElementById('thickness').addEventListener('change', function() {
+            document.getElementById('result').classList.remove('show');
+        });
+
+        document.getElementById('weldType').addEventListener('change', function() {
+            updateProcessFields();
+            document.getElementById('result').classList.remove('show');
+        });
+
+        document.getElementById('wireDiameter').addEventListener('change', function() {
+            document.getElementById('result').classList.remove('show');
+        });
+
+        document.getElementById('electrodeType').addEventListener('change', function() {
+            document.getElementById('result').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
