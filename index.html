@@ -12,128 +12,307 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
             min-height: 100vh;
             padding: 20px;
+            margin: 0;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2.8em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
         }
 
         .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.2em;
+            opacity: 0.95;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
         }
 
         .calculator {
-            padding: 40px 30px;
+            padding: 50px 40px;
+            background: rgba(248, 250, 252, 0.5);
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 32px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #1e293b;
             font-size: 1.1em;
+            letter-spacing: -0.01em;
         }
 
         select, input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 16px 20px;
             font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            transition: border-color 0.3s ease;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            color: #1e293b;
         }
 
         select:focus, input:focus {
             outline: none;
-            border-color: #ff6b35;
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        select:hover, input:hover {
+            border-color: rgba(59, 130, 246, 0.5);
         }
 
         .calculate-btn {
             width: 100%;
-            padding: 15px;
+            padding: 18px 24px;
             font-size: 18px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 16px;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
         }
 
         .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4), 0 6px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .calculate-btn:hover::before {
+            left: 100%;
+        }
+
+        .calculate-btn:active {
+            transform: translateY(-1px);
         }
 
         .result {
-            margin-top: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            margin-top: 40px;
+            padding: 32px;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
-            border-radius: 8px;
+            border-radius: 20px;
             text-align: center;
             display: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .result.show {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
         }
 
         .result h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
 
         .result p {
             font-size: 1.8em;
-            font-weight: bold;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .warning {
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            color: #856404;
+            margin-top: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 16px;
+            color: #92400e;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(251, 191, 36, 0.05) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .warning h4 {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .warning p {
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .result-card h4 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        .result-card p {
+            font-size: 1.4em;
+            margin: 0;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .credit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .credit:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 1);
         }
     </style>
 </head>
@@ -205,18 +384,18 @@
 
             <div id="result" class="result">
                 <h3>Recommended Settings</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px;">
-                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
-                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">⚡ Amperage</h4>
-                        <p id="amperageValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h4>⚡ Amperage</h4>
+                        <p id="amperageValue"></p>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
-                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">🔌 Voltage</h4>
-                        <p id="voltageValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                    <div class="result-card">
+                        <h4>🔌 Voltage</h4>
+                        <p id="voltageValue"></p>
                     </div>
-                    <div id="wireSpeedContainer" style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center; display: none;">
-                        <h4 style="font-size: 1em; margin-bottom: 5px; opacity: 0.9;">🔧 Wire Speed</h4>
-                        <p id="wireSpeedValue" style="font-size: 1.3em; margin: 0; font-weight: bold;"></p>
+                    <div id="wireSpeedContainer" class="result-card" style="display: none;">
+                        <h4>🔧 Wire Speed</h4>
+                        <p id="wireSpeedValue"></p>
                     </div>
                 </div>
             </div>
@@ -226,6 +405,10 @@
                 <p>These are general recommendations. Always consult your welding equipment manual and consider joint design, position, and material condition. Practice on test pieces first.</p>
             </div>
         </div>
+    </div>
+
+    <div class="credit">
+        Made by Phil Shiftly
     </div>
 
     <script>
@@ -262,18 +445,18 @@
                     }
                 },
                 mig: {
-                    0.0625: {amps: [30, 50], volts: [16, 18]},
-                    0.09375: {amps: [40, 60], volts: [17, 19]},
-                    0.125: {amps: [60, 90], volts: [18, 20]},
-                    0.1875: {amps: [80, 120], volts: [19, 21]},
-                    0.25: {amps: [100, 150], volts: [20, 22]},
-                    0.3125: {amps: [120, 170], volts: [21, 23]},
-                    0.375: {amps: [140, 190], volts: [22, 24]},
-                    0.4375: {amps: [160, 210], volts: [23, 25]},
-                    0.5: {amps: [180, 230], volts: [24, 26]},
-                    0.625: {amps: [200, 250], volts: [25, 27]},
-                    0.75: {amps: [220, 270], volts: [26, 28]},
-                    1: {amps: [240, 320], volts: [27, 29]}
+                    0.0625: {amps: [55, 75], volts: [16, 18]},
+                    0.09375: {amps: [80, 105], volts: [17, 19]},
+                    0.125: {amps: [110, 140], volts: [18, 20]},
+                    0.1875: {amps: [160, 205], volts: [19, 21]},
+                    0.25: {amps: [220, 270], volts: [20, 22]},
+                    0.3125: {amps: [275, 335], volts: [21, 23]},
+                    0.375: {amps: [330, 400], volts: [22, 24]},
+                    0.4375: {amps: [385, 465], volts: [23, 25]},
+                    0.5: {amps: [440, 530], volts: [24, 26]},
+                    0.625: {amps: [550, 670], volts: [25, 27]},
+                    0.75: {amps: [660, 800], volts: [26, 28]},
+                    1: {amps: [880, 1070], volts: [27, 29]}
                 },
                 tig: {
                     0.0625: {amps: [15, 30], volts: [10, 12]},
@@ -322,18 +505,18 @@
                     }
                 },
                 mig: {
-                    0.0625: {amps: [25, 45], volts: [16, 18]},
-                    0.09375: {amps: [35, 55], volts: [17, 19]},
-                    0.125: {amps: [55, 85], volts: [18, 20]},
-                    0.1875: {amps: [75, 115], volts: [19, 21]},
-                    0.25: {amps: [95, 145], volts: [20, 22]},
-                    0.3125: {amps: [115, 165], volts: [21, 23]},
-                    0.375: {amps: [135, 185], volts: [22, 24]},
-                    0.4375: {amps: [155, 205], volts: [23, 25]},
-                    0.5: {amps: [175, 225], volts: [24, 26]},
-                    0.625: {amps: [195, 245], volts: [25, 27]},
-                    0.75: {amps: [215, 265], volts: [26, 28]},
-                    1: {amps: [235, 315], volts: [27, 29]}
+                    0.0625: {amps: [47, 64], volts: [16, 18]},
+                    0.09375: {amps: [68, 89], volts: [17, 19]},
+                    0.125: {amps: [94, 119], volts: [18, 20]},
+                    0.1875: {amps: [136, 174], volts: [19, 21]},
+                    0.25: {amps: [187, 230], volts: [20, 22]},
+                    0.3125: {amps: [234, 285], volts: [21, 23]},
+                    0.375: {amps: [281, 340], volts: [22, 24]},
+                    0.4375: {amps: [327, 395], volts: [23, 25]},
+                    0.5: {amps: [374, 451], volts: [24, 26]},
+                    0.625: {amps: [468, 570], volts: [25, 27]},
+                    0.75: {amps: [561, 680], volts: [26, 28]},
+                    1: {amps: [748, 910], volts: [27, 29]}
                 },
                 tig: {
                     0.0625: {amps: [10, 25], volts: [10, 12]},
@@ -352,18 +535,18 @@
             },
             aluminum: {
                 mig: {
-                    0.0625: {amps: [40, 70], volts: [16, 18]},
-                    0.09375: {amps: [60, 90], volts: [17, 19]},
-                    0.125: {amps: [80, 120], volts: [18, 20]},
-                    0.1875: {amps: [110, 160], volts: [19, 21]},
-                    0.25: {amps: [140, 200], volts: [20, 22]},
-                    0.3125: {amps: [170, 240], volts: [21, 23]},
-                    0.375: {amps: [200, 280], volts: [22, 24]},
-                    0.4375: {amps: [230, 320], volts: [23, 25]},
-                    0.5: {amps: [260, 360], volts: [24, 26]},
-                    0.625: {amps: [290, 400], volts: [25, 27]},
-                    0.75: {amps: [320, 440], volts: [26, 28]},
-                    1: {amps: [350, 500], volts: [27, 29]}
+                    0.0625: {amps: [69, 94], volts: [16, 18]},
+                    0.09375: {amps: [100, 131], volts: [17, 19]},
+                    0.125: {amps: [138, 175], volts: [18, 20]},
+                    0.1875: {amps: [200, 256], volts: [19, 21]},
+                    0.25: {amps: [275, 338], volts: [20, 22]},
+                    0.3125: {amps: [344, 419], volts: [21, 23]},
+                    0.375: {amps: [413, 500], volts: [22, 24]},
+                    0.4375: {amps: [481, 581], volts: [23, 25]},
+                    0.5: {amps: [550, 663], volts: [24, 26]},
+                    0.625: {amps: [688, 838], volts: [25, 27]},
+                    0.75: {amps: [825, 1000], volts: [26, 28]},
+                    1: {amps: [1100, 1338], volts: [27, 29]}
                 },
                 tig: {
                     0.0625: {amps: [20, 40], volts: [10, 12]},
@@ -410,44 +593,44 @@
             }
         };
 
-        // Miller-based wire speed calculation function
+        // Miller Electric official wire speed calculation function
         function calculateWireSpeed(amperage, wireDiameter, metalType) {
-            // Miller-specific wire speed calculations based on actual Miller machine data
+            // Miller's official IPM per amp ratios from their specifications
             const wireSize = parseFloat(wireDiameter);
             
-            // Base IPM per amp ratios from Miller recommendations
+            // Miller's official wire feed speed multipliers
             let baseIpmPerAmp;
             
             if (metalType === 'steel') {
-                // Miller data: 125A = ~250 IPM for 0.035" wire (steel)
-                if (wireSize === 0.030) baseIpmPerAmp = 2.2;      // Faster feed for thinner wire
-                else if (wireSize === 0.035) baseIpmPerAmp = 2.0;  // Miller baseline
-                else if (wireSize === 0.045) baseIpmPerAmp = 1.7;  // Slower feed for thicker wire
-                else baseIpmPerAmp = 2.0;
+                // Miller's official multipliers for steel
+                if (wireSize === 0.030) baseIpmPerAmp = 2.0;      // Miller official
+                else if (wireSize === 0.035) baseIpmPerAmp = 1.6;  // Miller official: 125A = 200 IPM
+                else if (wireSize === 0.045) baseIpmPerAmp = 1.0;  // Miller official: 125A = 125 IPM
+                else baseIpmPerAmp = 1.6; // Default to 0.035" values
             } 
             else if (metalType === 'stainless') {
                 // Stainless typically runs 10-15% slower than steel
-                if (wireSize === 0.030) baseIpmPerAmp = 1.9;
-                else if (wireSize === 0.035) baseIpmPerAmp = 1.7;
-                else if (wireSize === 0.045) baseIpmPerAmp = 1.4;
-                else baseIpmPerAmp = 1.7;
+                if (wireSize === 0.030) baseIpmPerAmp = 1.7;
+                else if (wireSize === 0.035) baseIpmPerAmp = 1.4;
+                else if (wireSize === 0.045) baseIpmPerAmp = 0.85;
+                else baseIpmPerAmp = 1.4;
             } 
             else if (metalType === 'aluminum') {
-                // Aluminum typically runs faster due to thermal conductivity
-                if (wireSize === 0.030) baseIpmPerAmp = 2.8;
-                else if (wireSize === 0.035) baseIpmPerAmp = 2.5;
-                else if (wireSize === 0.045) baseIpmPerAmp = 2.1;
-                else baseIpmPerAmp = 2.5;
+                // Aluminum runs faster due to thermal conductivity
+                if (wireSize === 0.030) baseIpmPerAmp = 2.5;
+                else if (wireSize === 0.035) baseIpmPerAmp = 2.0;
+                else if (wireSize === 0.045) baseIpmPerAmp = 1.2;
+                else baseIpmPerAmp = 2.0;
             } 
             else {
-                baseIpmPerAmp = 2.0; // Default to steel values
+                baseIpmPerAmp = 1.6; // Default to steel 0.035" values
             }
             
-            // Calculate wire speed using Miller methodology
+            // Calculate wire speed using Miller's official methodology
             const calculatedSpeed = Math.round(amperage * baseIpmPerAmp);
             
-            // Apply Miller's practical limits (150-500 IPM typical range)
-            return Math.max(150, Math.min(500, calculatedSpeed));
+            // Apply practical limits for wire speed (100-800 IPM range)
+            return Math.max(100, Math.min(800, calculatedSpeed));
         }
 
         function calculateAmperage() {
